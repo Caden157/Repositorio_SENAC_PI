@@ -1,3 +1,7 @@
+/*
+Procedure que irá inserir dados na tabelas usuários por meio de uma transaction para garantir que não ocorrerá falhas nesse processo,
+pois são dados delicados.
+*/
 DELIMITER $$
 CREATE PROCEDURE insertUsuarios (uNome VARCHAR(255), uEmail VARCHAR(255), uSenha VARCHAR(255))
 BEGIN
@@ -18,9 +22,9 @@ END IF;
 END $$
 DELIMITER ;
 
-call insertUsuarios('Antônio Amargurido Alva', 'AntônioAmr5@gmail.com', 'jose123456');
-select * from usuarios where id = 1001;
-
+/*
+Procedure que retorna todos os exercícios de determinado usuario (Lembrando que a coluna de nomes é indexada).
+*/
 DELIMITER $$
 CREATE PROCEDURE exerLista (usr VARCHAR(255))
 BEGIN
@@ -28,9 +32,7 @@ SELECT u.nome AS 'Usuário', c.nome AS 'Curso', e.nome, e.acertos, e.quant_quest
 FROM exercicios e
 INNER JOIN cursos c, usuarios u
 WHERE e.fk_Usuarios_ID = (SELECT ID
-						  FROM usuarios
-						  WHERE nome = usr AND c.ID = e.fk_Cursos_ID AND u.ID = e.fk_Usuarios_ID);
+			  FROM usuarios
+			  WHERE nome = usr AND c.ID = e.fk_Cursos_ID AND u.ID = e.fk_Usuarios_ID);
 END $$
 DELIMITER ;
-
-call exerLista('Tony Burtt');
